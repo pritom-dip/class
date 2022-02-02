@@ -1,36 +1,25 @@
-// import "./App.css";
-import axios from "axios";
-import { createContext, lazy, Suspense, useEffect, useState } from "react";
-import Test from "./components/Test/Test";
-import AppProvider from "./contexts/AppProvider";
+import { Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import routes from "./routes/routes";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Loader = () => {
-    return <h1>Loading...</h1>;
+const Loading = () => {
+    return <h1>Loading</h1>;
 };
 
 function App() {
-    const [data, setDatas] = useState([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data: listData } = await axios.get("https://jsonplaceholder.typicode.com/todos");
-                setDatas(listData);
-            } catch (err) {
-                console.log(err.message);
-            }
-        };
-        fetchData();
-    }, []);
-
     return (
-        <Suspense fallback={<Loader />}>
-            <AppProvider>
-                <div className="App">
-                    <Test />
-                </div>
-            </AppProvider>
-        </Suspense>
+        <>
+            <Suspense fallback={<Loading />}>
+                <BrowserRouter>
+                    <Routes>
+                        {routes?.map((route, i) => {
+                            return <Route key={i} path={route.path} element={route.element}></Route>;
+                        })}
+                    </Routes>
+                </BrowserRouter>
+            </Suspense>
+        </>
     );
 }
 
