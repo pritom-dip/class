@@ -2,15 +2,13 @@ import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import routes from "./routes/routes";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-const Loading = () => {
-    return <h1>Loading</h1>;
-};
+import Loader from "./components/Loader/Loader";
+import AddToCartProvider from "./contexts/AddToCartContext";
 
 function App() {
     return (
-        <>
-            <Suspense fallback={<Loading />}>
+        <AddToCartProvider>
+            <Suspense fallback={<Loader />}>
                 <BrowserRouter>
                     <Routes>
                         {routes?.map((route, i) => {
@@ -19,7 +17,7 @@ function App() {
                     </Routes>
                 </BrowserRouter>
             </Suspense>
-        </>
+        </AddToCartProvider>
     );
 }
 

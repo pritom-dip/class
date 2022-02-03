@@ -1,45 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Footer from "../components/Partials/Footer/Footer";
 import Header from "../components/Partials/Header/Header";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
-
-const products = [
-    {
-        id: 1,
-        name: "Product 1",
-    },
-    {
-        id: 2,
-        name: "Product 2",
-    },
-];
+import { useEffect, useState } from "react";
+import Products from "../components/Home/Products/Products";
+import Loader from "../components/Loader/Loader";
+import axios from "axios";
+import useAsyncTask from "../hooks/useAsyncTask";
 
 const Home = () => {
-    const [startDate, setStartDate] = useState(new Date());
-    const navigate = useNavigate();
-    const goToPage = id => {
-        navigate(`/product/${id}`);
-    };
+    const { isLoading, datas: products } = useAsyncTask("https://fakestoreapi.com/products");
 
     return (
         <>
-            <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-
             <Header />
+            {isLoading ? <Loader /> : <Products products={products} />}
             <Footer />
-
-            {products?.map(product => {
-                return (
-                    <div>
-                        <h1>{product.name}</h1>
-                        <button onClick={() => goToPage(product.id)} className="btn btn-sm btn-danger">
-                            Go to the link
-                        </button>
-                    </div>
-                );
-            })}
         </>
     );
 };
